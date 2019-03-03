@@ -54,7 +54,6 @@
       let min = 0, max = 0;
       const { ATTACK_TYPE } = this.constructor;
 
-
       switch(this.attackType) {
         case ATTACK_TYPE.light: 
           min = averageDamage * 0.5;
@@ -74,28 +73,12 @@
       min = parseInt(min);
       max = parseInt(max);
 
-      // switch(this.attackType) {
-      //   case ATTACK_TYPE.light: 
-      //     min = 0;
-      //     max = averageDamage;
-      //     break;
+      const givenDamage = min + Math.floor(Math.random() * (max + 1 - min));
 
-      //   case ATTACK_TYPE.medium: 
-      //     min = Math.abs(averageDamage - 2);
-      //     max = averageDamage + 2;
-      //     break;
+      opponent.hp -= givenDamage;
+      console.log(`${this.name} attack ${givenDamage}`);
 
-      //   case ATTACK_TYPE.heavy: 
-      //     min = averageDamage;
-      //     max = 10;
-      //     break;        
-      // }
-      const damage = min + Math.floor(Math.random() * (max + 1 - min));
-
-      opponent.hp -= damage;
-      console.log(`${this.name} attack ${damage}`);
-
-      return damage;
+      return givenDamage;
     }
   }
 
@@ -127,7 +110,6 @@
     attack(opponent) {
       const rnd = Math.floor(Math.random() * 3);
       const dmg = this._attackMethods[rnd]();
-      // const dmg = rnd > 1 ? this._stoneAttack() : ( rnd > 0 ? this._chopAttack() : this._thrustAttack() );
       super.attack(opponent, dmg);
     }
   }
@@ -159,7 +141,6 @@
     attack(opponent) {
       const rnd = Math.floor(Math.random() * 3);
       const dmg = this._attackMethods[rnd]();
-      // const dmg = rnd > 7 ? this._jumpAttack() : ( rnd > 5 ? this._biteAttack() : this._clawsAttack() );
       super.attack(opponent, dmg);
     }
   }
@@ -193,8 +174,7 @@
 
       let temp = null;
 
-      while(receiver.hp > 0) {
-        // receiver.hp -= attacker.attack();
+      while(attacker.hp > 0) {
         attacker.attack(receiver);
 
         temp = attacker;
@@ -202,41 +182,16 @@
         receiver = temp;
       }
 
-      this.winner = attacker.name;
+      this.winner = receiver.name;
     }
   }
 
 
-  const monster = new Monster('Пушистик', Monster.ATTACK_TYPE.heavy);
-  const gladiator = new Gladiator('Geralt', Gladiator.ATTACK_TYPE.medium);
+  const monster = new Monster('Пушистик', Monster.ATTACK_TYPE.heavy, 10);
+  const gladiator = new Gladiator('Geralt', Gladiator.ATTACK_TYPE.medium, 10);
   const game = new Game(monster, gladiator);
 
   game.start();
-  console.log(game.winner);
-
-  return;
-
-  const arr = [];
-  for (let i = 0; i < 1000; i++) {
-    arr.push(Math.floor(Math.random() * 3));
-  }
-
-  const count = {
-    0: 0,
-    1: 0,
-    2: 0,
-    3: 0,
-    4: 0,
-    5: 0,
-    6: 0,
-    7: 0,
-    8: 0,
-    9: 0,
-    10: 0,
-  };
-
-  arr.forEach(item => { count[item]++; });
-  console.log(count);
-  
+  console.log(game.winner);  
   
 })();
